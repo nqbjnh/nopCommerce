@@ -121,6 +121,9 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.EnteringEmailTwice")]
         public bool EnteringEmailTwice { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.ForceMultifactorAuthentication")]
+        public bool ForceMultifactorAuthentication { get; set; }
+
         [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.GenderEnabled")]
         public bool GenderEnabled { get; set; }
 

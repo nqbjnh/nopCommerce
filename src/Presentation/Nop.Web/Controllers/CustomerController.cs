@@ -1863,14 +1863,23 @@ namespace Nop.Web.Controllers
             try
             {
                 if (ModelState.IsValid)
-                {
+                {                    
                     //save MultiFactorIsEnabledAttribute
                     if (!model.IsEnabled)
                     {
-                        _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.SelectedMultiFactorAuthenticationProviderAttribute, string.Empty);
+                        if (!_customerSettings.ForceMultifactorAuthentication)
+                        {
+                            _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.SelectedMultiFactorAuthenticationProviderAttribute, string.Empty);
 
-                        //raise change multi-factor authentication provider event       
-                        _eventPublisher.Publish(new CustomerChangeMultiFactorAuthenticationProviderEvent(customer));
+                            //raise change multi-factor authentication provider event       
+                            _eventPublisher.Publish(new CustomerChangeMultiFactorAuthenticationProviderEvent(customer));
+                        }
+                        else
+                        {
+                            model = _customerModelFactory.PrepareMultiFactorAuthenticationModel(model);                            
+                            model.Message = _localizationService.GetResource("Account.MultiFactorAuthentication.Warning.ForceActivation");
+                            return View(model);
+                        }
                     }
                     else
                     {
